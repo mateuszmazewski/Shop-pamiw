@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace Shop.Infrastructure.Repositories
 {
-    public class OrderItemRepository : IOrderItemRepository
+    public class OrderRepository : IOrderRepository
     {
         private AppDbContext _appDbContext;
 
-        public OrderItemRepository(AppDbContext appDbContext)
+        public OrderRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
 
-        public async Task AddAsync(OrderItem orderItem)
+        public async Task AddAsync(Order order)
         {
             try
             {
-                _appDbContext.Add(orderItem);
+                _appDbContext.Add(order);
                 _appDbContext.SaveChanges();
                 await Task.CompletedTask;
             }
@@ -30,14 +30,14 @@ namespace Shop.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<OrderItem>> BrowseAllAsync()
+        public async Task<IEnumerable<Order>> BrowseAllAsync()
         {
-            return await Task.FromResult(_appDbContext.OrderItem);
+            return await Task.FromResult(_appDbContext.Order);
         }
 
-        public async Task<IEnumerable<OrderItem>> BrowseAllByFilterAsync(int orderId)
+        public async Task<IEnumerable<Order>> BrowseAllByFilterAsync(int customerId)
         {
-            IEnumerable<OrderItem> o = _appDbContext.OrderItem.Where(x => x.Order.Id.Equals(orderId));
+            IEnumerable<Order> o = _appDbContext.Order.Where(x => x.Customer.Id.Equals(customerId));
 
             return await Task.FromResult(o);
         }
@@ -46,7 +46,7 @@ namespace Shop.Infrastructure.Repositories
         {
             try
             {
-                _appDbContext.Remove(_appDbContext.OrderItem.FirstOrDefault(x => x.Id == id));
+                _appDbContext.Remove(_appDbContext.Order.FirstOrDefault(x => x.Id == id));
                 _appDbContext.SaveChanges();
                 await Task.CompletedTask;
             }
@@ -56,23 +56,25 @@ namespace Shop.Infrastructure.Repositories
             }
         }
 
-        public async Task<OrderItem> GetAsync(int id)
+        public async Task<Order> GetAsync(int id)
         {
-            var o = _appDbContext.OrderItem.FirstOrDefault(x => x.Id == id);
+            var o = _appDbContext.Order.FirstOrDefault(x => x.Id == id);
 
             return await Task.FromResult(o);
         }
 
-        public async Task UpdateAsync(OrderItem orderItem)
+        public async Task UpdateAsync(Order order)
         {
             try
             {
-                var o = _appDbContext.OrderItem.FirstOrDefault(x => x.Id == orderItem.Id);
+                var o = _appDbContext.Order.FirstOrDefault(x => x.Id == order.Id);
                 if (o != null)
                 {
-                    o.Order = orderItem.Order;
-                    o.Product = orderItem.Product;
-                    o.Quantity = orderItem.Quantity;
+                    o.Customer = order.Customer;
+                    o.Payment = order.Payment;
+                    o.PaymentId = order.PaymentId;
+                    o.CreatedAt = order.CreatedAt;
+                    o.UpdatedAt = order.UpdatedAt;
 
                     _appDbContext.SaveChanges();
                     await Task.CompletedTask;

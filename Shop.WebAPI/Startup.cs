@@ -37,6 +37,8 @@ namespace Shop.WebAPI
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IOrderItemService, OrderItemService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
 
             services.AddDbContext<AppDbContext>(
                 options => options.UseSqlServer(
