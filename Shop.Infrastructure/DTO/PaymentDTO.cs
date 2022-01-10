@@ -1,24 +1,9 @@
-﻿using System;
+﻿using Shop.Core.Domain;
+using System;
 
-namespace Shop.Core.Domain
+namespace Shop.Infrastructure.DTO
 {
-    public enum PaymentMethod
-    {
-        BankTransfer,
-        Blik,
-        Cash,
-        CreditCard
-    }
-
-    public enum PaymentStatus
-    {
-        NotPaid,
-        InProgress,
-        Paid,
-        Interrupted
-    }
-
-    public class Payment
+    public class PaymentDTO
     {
         public int Id { get; set; }
         public Order Order { get; set; }
