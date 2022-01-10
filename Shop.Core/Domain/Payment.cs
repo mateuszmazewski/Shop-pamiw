@@ -14,6 +14,7 @@ namespace Shop.Core.Domain
     {
         public int Id { get; set; }
         public Order Order { get; set; }
+        public int OrderId { get; set; }
         public double Amount { get; set; }
         public string Status { get; set; }
         public DateTime PaymentDate { get; set; }
