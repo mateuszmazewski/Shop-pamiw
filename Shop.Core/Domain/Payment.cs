@@ -1,20 +1,34 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shop.Core.Domain
 {
     public enum PaymentMethod
     {
+        [Display(Name = "Przelew")]
         BankTransfer,
+
         Blik,
+
+        [Display(Name = "Gotówka")]
         Cash,
+
+        [Display(Name = "Karta płatnicza")]
         CreditCard
     }
 
     public enum PaymentStatus
     {
+        [Display(Name = "Niezrealizowana")]
         NotPaid,
+
+        [Display(Name = "W trakcie realizacji")]
         InProgress,
+
+        [Display(Name = "Zrealizowana")]
         Paid,
+
+        [Display(Name = "Przerwana")]
         Interrupted
     }
 
