@@ -141,7 +141,7 @@ namespace Zawodnicy.WebApp.Controllers
             return View(customer);
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
