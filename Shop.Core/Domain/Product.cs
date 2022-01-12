@@ -1,8 +1,17 @@
-﻿namespace Shop.Core.Domain
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Shop.Core.Domain
 {
     public enum UnitOfMeasurement
     {
-        Pieces, Kilogram, Meter
+        [Display(Name = "szt.")]
+        Pieces,
+
+        [Display(Name = "kg")]
+        Kilogram,
+
+        [Display(Name = "m")]
+        Meter
     }
 
     public class Product

@@ -1,4 +1,5 @@
 ﻿@model Shop.WebApp.Models.ProductVM
+@using Shop.Core.Domain
 
 <h4>ProductVM</h4>
 <hr />
@@ -30,7 +31,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="UnitOfMeasurement" class="control-label"></label>
-                <input asp-for="UnitOfMeasurement" class="form-control" />
+                <!--<input asp-for="UnitOfMeasurement" class="form-control" />-->
+                <br />
+                <select asp-for="@Model.UnitOfMeasurement" asp-items="Html.GetEnumSelectList<UnitOfMeasurement>()"></select>
                 <span asp-validation-for="UnitOfMeasurement" class="text-danger"></span>
             </div>
             <div class="form-group">
