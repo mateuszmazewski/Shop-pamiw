@@ -7,6 +7,7 @@ namespace Shop.Infrastructure.DTO
     {
         public int Id { get; set; }
         public Customer Customer { get; set; }
+        public int CustomerId { get; set; }
         public Payment Payment { get; set; }
         public int PaymentId { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -18,5 +18,10 @@ namespace Shop.WebApp.Models
 
         [Display(Name = "Data urodzenia")]
         public DateTime DateOfBirth { get; set; }
+
+        public override string ToString()
+        {
+            return $"[{Id}] {Name} {Surname}";
+        }
     }
 }

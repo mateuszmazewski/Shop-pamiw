@@ -25,11 +25,6 @@ namespace Shop.Infrastructure.Repositories
             .WithOne(p => p.Order)
             .HasForeignKey<Payment>(p => p.OrderId);
 
-            modelBuilder.Entity<Payment>()
-            .HasOne(p => p.Order)
-            .WithOne(o => o.Payment)
-            .HasForeignKey<Order>(o => o.PaymentId);
-
             base.OnModelCreating(modelBuilder);
         }
     }

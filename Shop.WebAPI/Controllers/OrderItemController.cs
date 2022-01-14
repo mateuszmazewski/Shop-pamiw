@@ -48,7 +48,9 @@ namespace Shop.WebAPI.Controllers
             OrderItem o = new OrderItem()
             {
                 Order = orderItem.Order,
+                OrderId = orderItem.OrderId,
                 Product = orderItem.Product,
+                ProductId = orderItem.ProductId,
                 Quantity = orderItem.Quantity
             };
 
@@ -64,7 +66,9 @@ namespace Shop.WebAPI.Controllers
             {
                 Id = id,
                 Order = orderItem.Order,
+                OrderId = orderItem.OrderId,
                 Product = orderItem.Product,
+                ProductId = orderItem.ProductId,
                 Quantity = orderItem.Quantity
             };
 

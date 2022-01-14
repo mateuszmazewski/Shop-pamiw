@@ -1,4 +1,5 @@
-﻿using Shop.Core.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop.Core.Domain;
 using Shop.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -32,12 +33,17 @@ namespace Shop.Infrastructure.Repositories
 
         public async Task<IEnumerable<OrderItem>> BrowseAllAsync()
         {
-            return await Task.FromResult(_appDbContext.OrderItem);
+            return await Task.FromResult(_appDbContext.OrderItem
+                .Include(x => x.Product)
+                .Include(x => x.Order));
         }
 
         public async Task<IEnumerable<OrderItem>> BrowseAllByFilterAsync(int orderId)
         {
-            IEnumerable<OrderItem> o = _appDbContext.OrderItem.Where(x => x.Order.Id.Equals(orderId));
+            IEnumerable<OrderItem> o = _appDbContext.OrderItem
+                .Include(x => x.Product)
+                .Include(x => x.Order)
+                .Where(x => x.Order.Id.Equals(orderId));
 
             return await Task.FromResult(o);
         }
@@ -58,7 +64,10 @@ namespace Shop.Infrastructure.Repositories
 
         public async Task<OrderItem> GetAsync(int id)
         {
-            var o = _appDbContext.OrderItem.FirstOrDefault(x => x.Id == id);
+            var o = _appDbContext.OrderItem
+                .Include(x => x.Product)
+                .Include(x => x.Order)
+                .FirstOrDefault(x => x.Id == id);
 
             return await Task.FromResult(o);
         }
@@ -71,7 +80,9 @@ namespace Shop.Infrastructure.Repositories
                 if (o != null)
                 {
                     o.Order = orderItem.Order;
+                    o.OrderId = orderItem.OrderId;
                     o.Product = orderItem.Product;
+                    o.ProductId = orderItem.ProductId;
                     o.Quantity = orderItem.Quantity;
 
                     _appDbContext.SaveChanges();

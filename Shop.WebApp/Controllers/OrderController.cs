@@ -4,18 +4,17 @@ using Newtonsoft.Json;
 using Shop.WebApp.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Zawodnicy.WebApp.Controllers
 {
-    public class PaymentController : Controller
+    public class OrderController : Controller
     {
         public IConfiguration Configuration;
 
-        public PaymentController(IConfiguration configuration)
+        public OrderController(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -35,51 +34,51 @@ namespace Zawodnicy.WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            List<PaymentVM> paymentsList = new List<PaymentVM>();
+            List<OrderVM> ordersList = new List<OrderVM>();
 
             using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
             {
                 using (var response = await httpClient.GetAsync(_restpath))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    paymentsList = JsonConvert.DeserializeObject<List<PaymentVM>>(apiResponse);
+                    ordersList = JsonConvert.DeserializeObject<List<OrderVM>>(apiResponse);
                 }
             }
 
-            return View(paymentsList);
+            return View(ordersList);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            PaymentVM payment = new PaymentVM();
-            OrderVM actualOrder;
+            OrderVM order = new OrderVM();
+            List<CustomerVM> customersList = new List<CustomerVM>();
 
             using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
             {
                 using (var response = await httpClient.GetAsync($"{_restpath}/{id}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    payment = JsonConvert.DeserializeObject<PaymentVM>(apiResponse);
+                    order = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
                 }
 
-                _restpath = GetHostUrl().Content + "order";
-                using (var response = await httpClient.GetAsync($"{_restpath}/{payment.OrderId}"))
+                _restpath = GetHostUrl().Content + "customer";
+                using (var response = await httpClient.GetAsync(_restpath))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    actualOrder = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
+                    customersList = JsonConvert.DeserializeObject<List<CustomerVM>>(apiResponse);
                 }
             }
 
-            ViewBag.OrdersList = new List<OrderVM>() { actualOrder }; // Only one order - actual (user can't change it)
-            return View(payment);
+            ViewBag.CustomersList = customersList;
+            return View(order);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(PaymentVM vm)
+        public async Task<IActionResult> Edit(OrderVM vm)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            PaymentVM result;
+            OrderVM result;
 
             try
             {
@@ -91,7 +90,7 @@ namespace Zawodnicy.WebApp.Controllers
                     using (var response = await httpClient.PutAsync($"{_restpath}/{vm.Id}", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        result = JsonConvert.DeserializeObject<PaymentVM>(apiResponse);
+                        result = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
                     }
                 }
             }
@@ -104,27 +103,27 @@ namespace Zawodnicy.WebApp.Controllers
 
         public async Task<IActionResult> Create()
         {
-            string _restpath = GetHostUrl().Content + "order";
-            List<OrderVM> ordersList = new List<OrderVM>();
+            string _restpath = GetHostUrl().Content + "customer";
+            List<CustomerVM> customersList = new List<CustomerVM>();
 
             using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
             {
                 using (var response = await httpClient.GetAsync(_restpath))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    ordersList = JsonConvert.DeserializeObject<List<OrderVM>>(apiResponse);
+                    customersList = JsonConvert.DeserializeObject<List<CustomerVM>>(apiResponse);
                 }
             }
 
-            ViewBag.OrdersList = ordersList.Where(x => x.PaymentId.Equals(0)).ToList(); // Only orders that do not have a payment assigned yet
-            return View(new PaymentVM());
+            ViewBag.CustomersList = customersList;
+            return View(new OrderVM());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(PaymentVM vm)
+        public async Task<IActionResult> Create(OrderVM vm)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            PaymentVM result;
+            OrderVM result;
 
             try
             {
@@ -136,7 +135,7 @@ namespace Zawodnicy.WebApp.Controllers
                     using (var response = await httpClient.PostAsync(_restpath, content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        result = JsonConvert.DeserializeObject<PaymentVM>(apiResponse);
+                        result = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
                     }
                 }
             }
@@ -147,21 +146,21 @@ namespace Zawodnicy.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(PaymentVM vm)
+        public async Task<IActionResult> Delete(OrderVM vm)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            PaymentVM payment;
+            OrderVM order;
 
             using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
             {
                 using (var response = await httpClient.GetAsync($"{_restpath}/{vm.Id}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    payment = JsonConvert.DeserializeObject<PaymentVM>(apiResponse);
+                    order = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
                 }
             }
 
-            return View(payment);
+            return View(order);
         }
 
         [HttpPost]
@@ -189,18 +188,18 @@ namespace Zawodnicy.WebApp.Controllers
         public async Task<IActionResult> Details(int id)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            PaymentVM payment;
+            OrderVM order;
 
             using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
             {
                 using (var response = await httpClient.GetAsync($"{_restpath}/{id}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    payment = JsonConvert.DeserializeObject<PaymentVM>(apiResponse);
+                    order = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
                 }
             }
 
-            return View(payment);
+            return View(order);
         }
     }
 }

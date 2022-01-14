@@ -1,4 +1,5 @@
-﻿using Shop.Core.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop.Core.Domain;
 using Shop.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -32,12 +33,15 @@ namespace Shop.Infrastructure.Repositories
 
         public async Task<IEnumerable<Payment>> BrowseAllAsync()
         {
-            return await Task.FromResult(_appDbContext.Payment);
+            return await Task.FromResult(_appDbContext.Payment
+                .Include(x => x.Order));
         }
 
         public async Task<Payment> GetByFilterAsync(int orderId)
         {
-            Payment p = _appDbContext.Payment.FirstOrDefault(x => x.Order.Id.Equals(orderId));
+            Payment p = _appDbContext.Payment
+                .Include(x => x.Order)
+                .FirstOrDefault(x => x.Order.Id.Equals(orderId));
 
             return await Task.FromResult(p);
         }
@@ -58,7 +62,9 @@ namespace Shop.Infrastructure.Repositories
 
         public async Task<Payment> GetAsync(int id)
         {
-            var p = _appDbContext.Payment.FirstOrDefault(x => x.Id == id);
+            var p = _appDbContext.Payment
+                .Include(x => x.Order)
+                .FirstOrDefault(x => x.Id == id);
 
             return await Task.FromResult(p);
         }

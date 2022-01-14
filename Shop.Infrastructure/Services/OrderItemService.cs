@@ -34,7 +34,9 @@ namespace Shop.Infrastructure.Services
             {
                 Id = x.Id,
                 Order = x.Order,
+                OrderId = x.OrderId,
                 Product = x.Product,
+                ProductId = x.ProductId,
                 Quantity = x.Quantity
             });
         }
@@ -47,7 +49,9 @@ namespace Shop.Infrastructure.Services
             {
                 Id = x.Id,
                 Order = x.Order,
+                OrderId = x.OrderId,
                 Product = x.Product,
+                ProductId = x.ProductId,
                 Quantity = x.Quantity
             });
         }
@@ -65,7 +69,9 @@ namespace Shop.Infrastructure.Services
             {
                 Id = o.Id,
                 Order = o.Order,
+                OrderId = o.OrderId,
                 Product = o.Product,
+                ProductId = o.ProductId,
                 Quantity = o.Quantity
             };
         }

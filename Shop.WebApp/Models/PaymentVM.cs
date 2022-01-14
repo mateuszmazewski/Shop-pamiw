@@ -9,7 +9,7 @@ namespace Shop.WebApp.Models
         [Display(Name = "ID Płatności")]
         public int Id { get; set; }
 
-        [Display(Name = "ID Zamówienia")]
+        [Display(Name = "Zamówienie")]
         public int OrderId { get; set; }
 
         [Display(Name = "Kwota")]

@@ -48,6 +48,7 @@ namespace Shop.WebAPI.Controllers
             Order o = new Order()
             {
                 Customer = order.Customer,
+                CustomerId = order.CustomerId,
                 Payment = order.Payment,
                 PaymentId = order.PaymentId
             };
@@ -64,8 +65,10 @@ namespace Shop.WebAPI.Controllers
             {
                 Id = id,
                 Customer = order.Customer,
+                CustomerId = order.CustomerId,
                 Payment = order.Payment,
-                PaymentId = order.PaymentId
+                PaymentId = order.PaymentId,
+                CreatedAt = order.CreatedAt
             };
 
             await _orderService.Update(o);

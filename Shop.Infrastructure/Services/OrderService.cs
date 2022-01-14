@@ -36,6 +36,7 @@ namespace Shop.Infrastructure.Services
             {
                 Id = x.Id,
                 Customer = x.Customer,
+                CustomerId = x.CustomerId,
                 Payment = x.Payment,
                 PaymentId = x.PaymentId,
                 CreatedAt = x.CreatedAt,
@@ -51,6 +52,7 @@ namespace Shop.Infrastructure.Services
             {
                 Id = x.Id,
                 Customer = x.Customer,
+                CustomerId = x.CustomerId,
                 Payment = x.Payment,
                 PaymentId = x.PaymentId,
                 CreatedAt = x.CreatedAt,
@@ -71,6 +73,7 @@ namespace Shop.Infrastructure.Services
             {
                 Id = o.Id,
                 Customer = o.Customer,
+                CustomerId = o.CustomerId,
                 Payment = o.Payment,
                 PaymentId = o.PaymentId,
                 CreatedAt = o.CreatedAt,

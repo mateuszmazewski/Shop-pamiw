@@ -11,10 +11,12 @@ namespace Shop.Infrastructure.Services
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IOrderRepository _orderRepository;
 
-        public PaymentService(IPaymentRepository paymentRepository)
+        public PaymentService(IPaymentRepository paymentRepository, IOrderRepository orderRepository)
         {
             _paymentRepository = paymentRepository;
+            _orderRepository = orderRepository;
         }
 
         public async Task Add(Payment payment)
@@ -26,6 +28,12 @@ namespace Shop.Infrastructure.Services
             payment.CreatedAt = DateTime.Now;
             payment.UpdatedAt = DateTime.Now;
             await _paymentRepository.AddAsync(payment);
+            Order o = await _orderRepository.GetAsync(payment.OrderId);
+            if (o != null)
+            {
+                o.PaymentId = payment.Id;
+                await _orderRepository.UpdateAsync(o);
+            }
         }
 
         public async Task<IEnumerable<PaymentDTO>> BrowseAll()
@@ -64,6 +72,16 @@ namespace Shop.Infrastructure.Services
 
         public async Task Delete(int id)
         {
+            Payment p = await _paymentRepository.GetAsync(id);
+            if (p != null)
+            {
+                Order o = await _orderRepository.GetAsync(p.OrderId);
+                if (o != null)
+                {
+                    o.PaymentId = 0;
+                    await _orderRepository.UpdateAsync(o);
+                }
+            }
             await _paymentRepository.DelAsync(id);
         }
 
@@ -90,7 +108,14 @@ namespace Shop.Infrastructure.Services
             {
                 throw new ArgumentNullException("payment cannot be null");
             }
+            payment.UpdatedAt = DateTime.Now;
             await _paymentRepository.UpdateAsync(payment);
+            Order o = await _orderRepository.GetAsync(payment.OrderId);
+            if (o != null)
+            {
+                o.PaymentId = payment.Id;
+                await _orderRepository.UpdateAsync(o);
+            }
         }
     }
 }

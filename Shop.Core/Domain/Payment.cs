@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shop.Core.Domain
 {
@@ -35,8 +36,9 @@ namespace Shop.Core.Domain
     public class Payment
     {
         public int Id { get; set; }
-        public Order Order { get; set; }
-        public int OrderId { get; set; }
+        [JsonIgnore]
+        public Order Order { get; set; } // Navigation property
+        public int OrderId { get; set; } // Foreign key
         public double Amount { get; set; }
         public PaymentStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }

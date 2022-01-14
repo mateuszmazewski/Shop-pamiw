@@ -1,4 +1,5 @@
-﻿using Shop.Core.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop.Core.Domain;
 using Shop.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -32,12 +33,17 @@ namespace Shop.Infrastructure.Repositories
 
         public async Task<IEnumerable<Order>> BrowseAllAsync()
         {
-            return await Task.FromResult(_appDbContext.Order);
+            return await Task.FromResult(_appDbContext.Order
+                .Include(x => x.Customer)
+                .Include(x => x.Payment));
         }
 
         public async Task<IEnumerable<Order>> BrowseAllByFilterAsync(int customerId)
         {
-            IEnumerable<Order> o = _appDbContext.Order.Where(x => x.Customer.Id.Equals(customerId));
+            IEnumerable<Order> o = _appDbContext.Order
+                .Include(x => x.Customer)
+                .Include(x => x.Payment)
+                .Where(x => x.Customer.Id.Equals(customerId));
 
             return await Task.FromResult(o);
         }
@@ -58,7 +64,10 @@ namespace Shop.Infrastructure.Repositories
 
         public async Task<Order> GetAsync(int id)
         {
-            var o = _appDbContext.Order.FirstOrDefault(x => x.Id == id);
+            var o = _appDbContext.Order
+                .Include(x => x.Customer)
+                .Include(x => x.Payment)
+                .FirstOrDefault(x => x.Id == id);
 
             return await Task.FromResult(o);
         }
@@ -71,6 +80,7 @@ namespace Shop.Infrastructure.Repositories
                 if (o != null)
                 {
                     o.Customer = order.Customer;
+                    o.CustomerId = order.CustomerId;
                     o.Payment = order.Payment;
                     o.PaymentId = order.PaymentId;
                     o.CreatedAt = order.CreatedAt;

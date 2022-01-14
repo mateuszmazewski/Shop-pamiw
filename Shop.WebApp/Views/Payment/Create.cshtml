@@ -1,5 +1,13 @@
 ﻿@model Shop.WebApp.Models.PaymentVM
 @using Shop.Core.Domain
+@using System.Linq;
+@{
+    List<OrderVM> OrdersList = null;
+    if (ViewBag.OrdersList != null)
+    {
+        OrdersList = ViewBag.OrdersList as List<OrderVM>;
+    }
+}
 
 <h4>PaymentVM</h4>
 <hr />
@@ -14,45 +22,62 @@
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             -->
-            <div class="form-group">
-                <label asp-for="OrderId" class="control-label"></label>
-                <input asp-for="OrderId" class="form-control" />
-                <span asp-validation-for="OrderId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <!--<input asp-for="Status" class="form-control" />-->
-                <br />
-                <select asp-for="@Model.Status" asp-items="Html.GetEnumSelectList<PaymentStatus>()"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <!--
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            -->
-            <div class="form-group">
-                <label asp-for="PaymentMethod" class="control-label"></label>
-                <!--<input asp-for="PaymentMethod" class="form-control" />-->
-                <br />
-                <select asp-for="@Model.PaymentMethod" asp-items="Html.GetEnumSelectList<PaymentMethod>()"></select>
-                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+            @{
+                if (OrdersList != null)
+                {
+                    <div class="form-group">
+                        <label asp-for="OrderId" class="control-label"></label>
+                        <br />
+                        <select asp-for="@Model.OrderId"
+                                asp-items="@OrdersList.Select(x => new SelectListItem()
+                                                                   {
+                                                                        Text = x.ToString(),
+                                                                        Value = x.Id.ToString()
+                                                                   });">
+                        </select>
+                        <span asp-validation-for="OrderId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Amount" class="control-label"></label>
+                        <input asp-for="Amount" class="form-control" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label"></label>
+                        <!--<input asp-for="Status" class="form-control" />-->
+                        <br />
+                        <select asp-for="@Model.Status" asp-items="Html.GetEnumSelectList<PaymentStatus>()"></select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    <!--
+                    <div class="form-group">
+                        <label asp-for="CreatedAt" class="control-label"></label>
+                        <input asp-for="CreatedAt" class="form-control" />
+                        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UpdatedAt" class="control-label"></label>
+                        <input asp-for="UpdatedAt" class="form-control" />
+                        <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+                    </div>
+                    -->
+                    <div class="form-group">
+                        <label asp-for="PaymentMethod" class="control-label"></label>
+                        <!--<input asp-for="PaymentMethod" class="form-control" />-->
+                        <br />
+                        <select asp-for="@Model.PaymentMethod" asp-items="Html.GetEnumSelectList<PaymentMethod>()"></select>
+                        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                }
+                else
+                {
+                    <span>Nie istnieją żadne zamówienia bez przypisanych płatności, dlatego nie można utworzyć płatności.</span>
+                }
+            }
         </form>
     </div>
 </div>
