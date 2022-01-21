@@ -143,6 +143,7 @@ namespace Zawodnicy.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /*
         public async Task<IActionResult> Delete(OrderItemVM vm)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
@@ -159,8 +160,8 @@ namespace Zawodnicy.WebApp.Controllers
 
             return View(orderItem);
         }
+        */
 
-        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
@@ -179,7 +180,7 @@ namespace Zawodnicy.WebApp.Controllers
             {
                 return View(ex);
             }
-            return RedirectToAction(nameof(Index));
+            return Redirect(Request.Headers["Referer"].ToString()); // Redirect to previous page
         }
 
         public async Task<IActionResult> Details(int id)

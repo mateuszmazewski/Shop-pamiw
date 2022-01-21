@@ -2,6 +2,19 @@
 @using Shop.Core.Domain
 @{List<OrderItemVM> OrderItemsList = ViewBag.OrderItemsList as List<OrderItemVM>;}
 
+@{
+    String UnitOfMeasurementName(UnitOfMeasurement uom)
+    {
+        switch (uom)
+        {
+            case UnitOfMeasurement.Pieces: return "szt.";
+            case UnitOfMeasurement.Kilogram: return "kg";
+            case UnitOfMeasurement.Meter: return "m";
+            default: return "";
+        }
+    }
+}
+
 <div>
     <h4>OrderVM</h4>
     <hr />
@@ -39,6 +52,7 @@
     </dl>
 </div>
 <a href="/OrderItem/Create/@Model.Id" class="btn btn-primary">Dodaj produkt</a>
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -68,18 +82,6 @@
                     @orderItem.Product.Price zł
                 </td>
                 <td>
-                    @{
-                        String UnitOfMeasurementName(UnitOfMeasurement uom)
-                        {
-                            switch (uom)
-                            {
-                                case UnitOfMeasurement.Pieces: return "szt.";
-                                case UnitOfMeasurement.Kilogram: return "kg";
-                                case UnitOfMeasurement.Meter: return "m";
-                                default: return "";
-                            }
-                        }
-                    }
                     @orderItem.Quantity @UnitOfMeasurementName(orderItem.Product.UnitOfMeasurement)
                 </td>
                 <td>
@@ -90,9 +92,7 @@
                     @sum zł
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = orderItem.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = orderItem.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = orderItem.Id })
+                    @Html.ActionLink("Delete", "Delete", "OrderItem", new { id = orderItem.Id })
                 </td>
             </tr>
         }
