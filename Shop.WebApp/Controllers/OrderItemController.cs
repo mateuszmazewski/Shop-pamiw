@@ -119,20 +119,46 @@ namespace Zawodnicy.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(OrderItemVM vm)
         {
-            string _restpath = GetHostUrl().Content + ControllerName();
+            string _restpath;
             OrderItemVM result;
 
             try
             {
                 using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
                 {
+                    _restpath = GetHostUrl().Content + $"Product/{vm.ProductId}";
+                    ProductVM product;
+                    using (var response = await httpClient.GetAsync(_restpath))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        product = JsonConvert.DeserializeObject<ProductVM>(apiResponse);
+                    }
+
+                    if (product.Stock < vm.Quantity)
+                    {
+                        ViewBag.Product = product;
+                        return View("NotEnoughProducts", vm);
+                    }
+
+                    product.Stock -= vm.Quantity;
+
                     string jsonString = System.Text.Json.JsonSerializer.Serialize(vm);
                     var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+                    _restpath = GetHostUrl().Content + ControllerName();
 
                     using (var response = await httpClient.PostAsync(_restpath, content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         result = JsonConvert.DeserializeObject<OrderItemVM>(apiResponse);
+                    }
+
+                    _restpath = GetHostUrl().Content + $"Product/{vm.ProductId}";
+                    jsonString = System.Text.Json.JsonSerializer.Serialize(product);
+                    content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync(_restpath, content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
                     }
                 }
             }
