@@ -140,27 +140,8 @@ namespace Zawodnicy.WebApp.Controllers
             {
                 return View(ex);
             }
-            return RedirectToAction(nameof(Index));
+            return Redirect($"/Order/Details/{vm.Id}"); // Go back to order details view
         }
-
-        /*
-        public async Task<IActionResult> Delete(OrderItemVM vm)
-        {
-            string _restpath = GetHostUrl().Content + ControllerName();
-            OrderItemVM orderItem;
-
-            using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
-            {
-                using (var response = await httpClient.GetAsync($"{_restpath}/{vm.Id}"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    orderItem = JsonConvert.DeserializeObject<OrderItemVM>(apiResponse);
-                }
-            }
-
-            return View(orderItem);
-        }
-        */
 
         public async Task<IActionResult> Delete(int id)
         {

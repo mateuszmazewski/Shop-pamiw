@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Shop.WebApp.Models.OrderVM>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Utwórz nowe zamówienie</a>
 </p>
 <table class="table">
     <thead>
@@ -32,10 +32,18 @@
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CustomerId)
+                    [@Html.DisplayFor(modelItem => item.Customer.Id)]
+                    @Html.DisplayFor(modelItem => item.Customer.Name)
+                    @Html.DisplayFor(modelItem => item.Customer.Surname)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PaymentId)
+                    @if (item.PaymentId != 0)
+                    {
+                        @:[@Html.DisplayFor(modelItem => item.PaymentId)]
+                        @:@Html.DisplayFor(modelItem => item.Payment.Amount) zł;
+                        @:@Html.DisplayFor(modelItem => item.Payment.PaymentMethod);
+                        @:@Html.DisplayFor(modelItem => item.Payment.Status)
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreatedAt)
@@ -44,9 +52,9 @@
                     @Html.DisplayFor(modelItem => item.UpdatedAt)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Szczegóły", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Usuń", "Delete", new { id = item.Id })
                 </td>
             </tr>
         }

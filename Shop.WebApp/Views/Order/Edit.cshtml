@@ -7,7 +7,7 @@
     }
 }
 
-<h4>OrderVM</h4>
+<h4>Edycja zamówienia</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -33,12 +33,13 @@
                 </select>
                 <span asp-validation-for="CustomerId" class="text-danger"></span>
             </div>
-
+            <!--
             <div class="form-group">
                 <label asp-for="PaymentId" class="control-label"></label>
                 <input asp-for="PaymentId" class="form-control" />
                 <span asp-validation-for="PaymentId" class="text-danger"></span>
             </div>
+            -->
             <div class="form-group">
                 <!--<label asp-for="CreatedAt" class="control-label"></label>-->
                 <input asp-for="CreatedAt" class="form-control" readonly hidden /> <!-- only to save CreatedAt while editing -->
@@ -60,7 +61,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Powrót do listy zamówień</a>
 </div>
 
 @section Scripts {

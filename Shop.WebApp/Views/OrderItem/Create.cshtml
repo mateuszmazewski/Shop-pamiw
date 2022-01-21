@@ -1,7 +1,7 @@
 ﻿@model Shop.WebApp.Models.OrderItemVM
 @{List<ProductVM> ProductsList = ViewBag.ProductsList as List<ProductVM>;}
 
-<h4>OrderItemVM</h4>
+<h4>Dodawanie produktu do zamówienia</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -41,7 +41,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Powrót do zamówienia", "Details", "Order", new { id = Model.OrderId })
 </div>
 
 @section Scripts {
