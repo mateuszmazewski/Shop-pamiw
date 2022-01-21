@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Zawodnicy.WebApp.Controllers
 {
-    public class OrderController : Controller
+    public class OrderItemController : Controller
     {
         public IConfiguration Configuration;
 
-        public OrderController(IConfiguration configuration)
+        public OrderItemController(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -34,51 +34,42 @@ namespace Zawodnicy.WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            List<OrderVM> ordersList = new List<OrderVM>();
+            List<OrderItemVM> orderItemsList = new List<OrderItemVM>();
 
             using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
             {
                 using (var response = await httpClient.GetAsync(_restpath))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    ordersList = JsonConvert.DeserializeObject<List<OrderVM>>(apiResponse);
+                    orderItemsList = JsonConvert.DeserializeObject<List<OrderItemVM>>(apiResponse);
                 }
             }
 
-            return View(ordersList);
+            return View(orderItemsList);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            OrderVM order = new OrderVM();
-            List<CustomerVM> customersList = new List<CustomerVM>();
+            OrderItemVM orderItem = new OrderItemVM();
 
             using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
             {
                 using (var response = await httpClient.GetAsync($"{_restpath}/{id}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    order = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
-                }
-
-                _restpath = GetHostUrl().Content + "customer";
-                using (var response = await httpClient.GetAsync(_restpath))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    customersList = JsonConvert.DeserializeObject<List<CustomerVM>>(apiResponse);
+                    orderItem = JsonConvert.DeserializeObject<OrderItemVM>(apiResponse);
                 }
             }
 
-            ViewBag.CustomersList = customersList;
-            return View(order);
+            return View(orderItem);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(OrderVM vm)
+        public async Task<IActionResult> Edit(OrderItemVM vm)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            OrderVM result;
+            OrderItemVM result;
 
             try
             {
@@ -90,7 +81,7 @@ namespace Zawodnicy.WebApp.Controllers
                     using (var response = await httpClient.PutAsync($"{_restpath}/{vm.Id}", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        result = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
+                        result = JsonConvert.DeserializeObject<OrderItemVM>(apiResponse);
                     }
                 }
             }
@@ -101,29 +92,35 @@ namespace Zawodnicy.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Create()
+        [HttpGet]
+        [Route("OrderItem/Create/{orderId:int}")] // Add orderItem for specific order
+        public async Task<IActionResult> Create(int orderId)
         {
-            string _restpath = GetHostUrl().Content + "customer";
-            List<CustomerVM> customersList = new List<CustomerVM>();
+            string _restpath = GetHostUrl().Content + "product";
+            List<ProductVM> productsList = new List<ProductVM>();
 
             using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
             {
                 using (var response = await httpClient.GetAsync(_restpath))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    customersList = JsonConvert.DeserializeObject<List<CustomerVM>>(apiResponse);
+                    productsList = JsonConvert.DeserializeObject<List<ProductVM>>(apiResponse);
                 }
             }
 
-            ViewBag.CustomersList = customersList;
-            return View(new OrderVM());
+            var orderItemVM = new OrderItemVM()
+            {
+                OrderId = orderId
+            };
+            ViewBag.ProductsList = productsList;
+            return View(orderItemVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(OrderVM vm)
+        public async Task<IActionResult> Create(OrderItemVM vm)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            OrderVM result;
+            OrderItemVM result;
 
             try
             {
@@ -135,7 +132,7 @@ namespace Zawodnicy.WebApp.Controllers
                     using (var response = await httpClient.PostAsync(_restpath, content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        result = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
+                        result = JsonConvert.DeserializeObject<OrderItemVM>(apiResponse);
                     }
                 }
             }
@@ -146,21 +143,21 @@ namespace Zawodnicy.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(OrderVM vm)
+        public async Task<IActionResult> Delete(OrderItemVM vm)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            OrderVM order;
+            OrderItemVM orderItem;
 
             using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
             {
                 using (var response = await httpClient.GetAsync($"{_restpath}/{vm.Id}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    order = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
+                    orderItem = JsonConvert.DeserializeObject<OrderItemVM>(apiResponse);
                 }
             }
 
-            return View(order);
+            return View(orderItem);
         }
 
         [HttpPost]
@@ -188,27 +185,18 @@ namespace Zawodnicy.WebApp.Controllers
         public async Task<IActionResult> Details(int id)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
-            OrderVM order;
-            List<OrderItemVM> orderItemsList;
+            OrderItemVM orderItem;
 
             using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
             {
                 using (var response = await httpClient.GetAsync($"{_restpath}/{id}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    order = JsonConvert.DeserializeObject<OrderVM>(apiResponse);
-                }
-
-                _restpath = GetHostUrl().Content + $"OrderItem/filter?orderId={id}";
-                using (var response = await httpClient.GetAsync(_restpath))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    orderItemsList = JsonConvert.DeserializeObject<List<OrderItemVM>>(apiResponse);
+                    orderItem = JsonConvert.DeserializeObject<OrderItemVM>(apiResponse);
                 }
             }
 
-            ViewBag.OrderItemsList = orderItemsList;
-            return View(order);
+            return View(orderItem);
         }
     }
 }

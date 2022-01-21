@@ -18,5 +18,10 @@ namespace Shop.WebApp.Models
 
         [Display(Name = "J.m.")]
         public UnitOfMeasurement UnitOfMeasurement { get; set; }
+
+        public override string ToString()
+        {
+            return $"[{Id}] {Name} -- {Price} zł";
+        }
     }
 }
