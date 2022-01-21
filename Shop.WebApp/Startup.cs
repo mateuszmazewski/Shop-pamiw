@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,6 +25,22 @@ namespace Shop.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            CultureInfo[] cultures = {
+            new CultureInfo("pl-PL"),
+            new CultureInfo("en")
+        };
+            // Set decimal separator as dot globally
+            // In order to fix using decimal values in ASP.NET Core MVC data binding
+            cultures[0].NumberFormat = cultures[1].NumberFormat;
+            CultureInfo.DefaultThreadCurrentCulture = cultures[0];
+
+            services.Configure<RequestLocalizationOptions>(opt =>
+            {
+                opt.DefaultRequestCulture = new RequestCulture(cultures[0]);
+                opt.SupportedCultures = cultures;
+                opt.SupportedUICultures = cultures;
+            });
+
             services.AddControllersWithViews();
         }
 
