@@ -23,48 +23,52 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-md navbar-inverse headroom border-bottom box-shadow">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Shop.WebApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <div class="navbar-header">
+                    <!-- Button for smallest screens -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                    <a class="navbar-brand" href="/"><img src="~/images/icons/icon60.png" alt="Shop Management App"></a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Customer" ? "active" : "")">
+                            <a asp-area="" asp-controller="Customer" asp-action="Index">Klienci</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Product" ? "active" : "")">
+                            <a asp-area="" asp-controller="Product" asp-action="Index">Produkty</a>
                         </li>
-
+                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Order" ? "active" : "")">
+                            <a asp-area="" asp-controller="Order" asp-action="Index">Zamówienia</a>
+                        </li>
+                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Payment" ? "active" : "")">
+                            <a asp-area="" asp-controller="Payment" asp-action="Index">Płatności</a>
+                        </li>
                         @* Wylogowanie, zalogowanie, zalogowany użytkownik *@
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
+                            <li>
                                 @*<a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Witaj @User.Identity.Name</a>*@
-                                Witaj @User.Identity.Name
+                                <a>Witaj @User.Identity.Name</a>
                             </li>
-                            <li class="nav-item">
-                                <form asp-area="" asp-controller="Account" asp-action="Logout" id="logoutForm" method="post" class="navbar-right">
-                                    <a href="javascript:document.getElementById('logoutForm').submit()">Wyloguj</a>
+                            <li>
+                                <form asp-area="" asp-controller="Account" asp-action="Logout" id="logoutForm" method="post">
+                                    <a class="btn text-danger" href="javascript:document.getElementById('logoutForm').submit()">Wyloguj</a>
                                 </form>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Zarejestruj się</a>
+                                <a class="btn" asp-area="" asp-controller="Account" asp-action="Register">Zarejestruj się</a>
                                 @*<a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="RegisterWithConfirm">Zarejestruj się</a>*@
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Zaloguj się</a>
+                                <a class="btn" asp-area="" asp-controller="Account" asp-action="Login">Zaloguj się</a>
                             </li>
                         }
-
                     </ul>
-                </div>
+                </div><!--/.nav-collapse -->
             </div>
         </nav>
     </header>
