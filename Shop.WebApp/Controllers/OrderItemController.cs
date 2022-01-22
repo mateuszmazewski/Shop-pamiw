@@ -31,67 +31,6 @@ namespace Zawodnicy.WebApp.Controllers
             return cn;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            string _restpath = GetHostUrl().Content + ControllerName();
-            List<OrderItemVM> orderItemsList = new List<OrderItemVM>();
-
-            using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
-            {
-                using (var response = await httpClient.GetAsync(_restpath))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    orderItemsList = JsonConvert.DeserializeObject<List<OrderItemVM>>(apiResponse);
-                }
-            }
-
-            return View(orderItemsList);
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            string _restpath = GetHostUrl().Content + ControllerName();
-            OrderItemVM orderItem = new OrderItemVM();
-
-            using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
-            {
-                using (var response = await httpClient.GetAsync($"{_restpath}/{id}"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    orderItem = JsonConvert.DeserializeObject<OrderItemVM>(apiResponse);
-                }
-            }
-
-            return View(orderItem);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(OrderItemVM vm)
-        {
-            string _restpath = GetHostUrl().Content + ControllerName();
-            OrderItemVM result;
-
-            try
-            {
-                using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
-                {
-                    string jsonString = System.Text.Json.JsonSerializer.Serialize(vm);
-                    var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-
-                    using (var response = await httpClient.PutAsync($"{_restpath}/{vm.Id}", content))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        result = JsonConvert.DeserializeObject<OrderItemVM>(apiResponse);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                return View(ex);
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
         [HttpGet]
         [Route("OrderItem/Create/{orderId:int}")] // Add orderItem for specific order
         public async Task<IActionResult> Create(int orderId)
@@ -197,23 +136,6 @@ namespace Zawodnicy.WebApp.Controllers
                 return View(ex);
             }
             return Redirect(Request.Headers["Referer"].ToString()); // Redirect to previous page
-        }
-
-        public async Task<IActionResult> Details(int id)
-        {
-            string _restpath = GetHostUrl().Content + ControllerName();
-            OrderItemVM orderItem;
-
-            using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
-            {
-                using (var response = await httpClient.GetAsync($"{_restpath}/{id}"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    orderItem = JsonConvert.DeserializeObject<OrderItemVM>(apiResponse);
-                }
-            }
-
-            return View(orderItem);
         }
     }
 }
