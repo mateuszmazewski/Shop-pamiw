@@ -1,0 +1,19 @@
+{
+  "name": "Shop Management App",
+  "short_name": "Shop Management App",
+  "description": "Shop Management App in ASP.NET Core.",
+  "icons": [
+    {
+      "src": "/images/icons/icon192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "images/icons/icon512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "standalone",
+  "start_url": "/"
+}

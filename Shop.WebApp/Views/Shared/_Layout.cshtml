@@ -4,15 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Shop.WebApp</title>
+
+    <link rel="manifest" href="~/manifest.json" />
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 
-    <link rel="stylesheet" href="~/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" />
 
     <!-- Custom styles for our template -->
-    <link rel="stylesheet" href="~/css/bootstrap-theme.css" media="screen">
-    <link rel="stylesheet" href="~/css/main.css">
+    <link rel="stylesheet" href="~/css/bootstrap-theme.css" media="screen" />
+    <link rel="stylesheet" href="~/css/main.css" />
 </head>
 <body>
     <header>
@@ -51,5 +54,13 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('~/serviceworker.js')
+                .then(function () { console.log('Service Worker Registered'); });
+        }
+    </script>
 </body>
 </html>
