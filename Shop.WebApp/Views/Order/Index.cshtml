@@ -3,7 +3,8 @@
 <p>
     <a asp-action="Create">Utwórz nowe zamówienie</a>
 </p>
-<table class="table">
+<input type="search" id="searchInput" class="search" placeholder="Filtrowanie danych..." />
+<table class="table" id="orderTable">
     <thead>
         <tr>
             <th>
@@ -60,3 +61,22 @@
         }
     </tbody>
 </table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.search').on('keyup', function () {
+            var datasearch = $(this).val().toLowerCase();
+            $("#orderTable tr").not(':first').each(function () {
+                var stringdata = $(this).text().toLowerCase();
+                if (stringdata.indexOf(datasearch) === -1) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+        });
+    })
+</script>

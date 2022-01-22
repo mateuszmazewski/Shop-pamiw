@@ -72,9 +72,10 @@
         </dd>
     </dl>
 </div>
-<a href="/OrderItem/Create/@Model.Id" class="btn btn-primary">Dodaj produkt</a>
-<br />
-<table class="table">
+<a href="/OrderItem/Create/@Model.Id" class="btn btn-primary">Dodaj produkt do zamówienia</a>
+<h3></h3>
+<input type="search" id="searchInput" class="search" placeholder="Filtrowanie danych..." />
+<table class="table" id="productsTable">
     <thead>
         <tr>
             <th>
@@ -123,3 +124,22 @@
     @Html.ActionLink("Edytuj zamówienie", "Edit", new { id = Model.Id }) |
     <a asp-action="Index">Powrót do listy zamówień</a>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.search').on('keyup', function () {
+            var datasearch = $(this).val().toLowerCase();
+            $("#productsTable tr").not(':first').each(function () {
+                var stringdata = $(this).text().toLowerCase();
+                if (stringdata.indexOf(datasearch) === -1) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+        });
+    })
+</script>
