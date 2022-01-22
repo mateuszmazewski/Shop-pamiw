@@ -1,6 +1,13 @@
 ﻿@model Shop.WebApp.Models.OrderVM
 @using Shop.Core.Domain
-@{List<OrderItemVM> OrderItemsList = ViewBag.OrderItemsList as List<OrderItemVM>;}
+@{List<OrderItemVM> OrderItemsList = ViewBag.OrderItemsList as List<OrderItemVM>;
+    double total = 0;
+    foreach (OrderItemVM orderItem in OrderItemsList)
+    {
+        total += Math.Round(orderItem.Product.Price * orderItem.Quantity, 2);
+    }
+    total = Math.Round(total, 2);
+}
 
 @{
     String UnitOfMeasurementName(UnitOfMeasurement uom)
@@ -57,6 +64,12 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdatedAt)
         </dd>
+        <dt class="col-sm-2">
+            Całkowita kwota zamówienia
+        </dt>
+        <dd class="col-sm-10">
+            @total zł
+        </dd>
     </dl>
 </div>
 <a href="/OrderItem/Create/@Model.Id" class="btn btn-primary">Dodaj produkt</a>
@@ -94,7 +107,7 @@
                 </td>
                 <td>
                     @{
-                        var sum = orderItem.Product.Price * orderItem.Quantity;
+                        double sum = orderItem.Product.Price * orderItem.Quantity;
                         sum = Math.Round(sum, 2);
                     }
                     @sum zł
