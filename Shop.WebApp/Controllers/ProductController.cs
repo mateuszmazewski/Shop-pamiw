@@ -71,6 +71,14 @@ namespace Zawodnicy.WebApp.Controllers
             string _restpath = GetHostUrl().Content + ControllerName();
             ProductVM result;
 
+            if (vm.UnitOfMeasurement == Shop.Core.Domain.UnitOfMeasurement.Pieces)
+            {
+                if (vm.Stock % 1 != 0) // Not integer
+                {
+                    return View("WrongStock", vm);
+                }
+            }
+
             try
             {
                 using (var httpClient = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } }))
@@ -102,6 +110,15 @@ namespace Zawodnicy.WebApp.Controllers
         {
             string _restpath = GetHostUrl().Content + ControllerName();
             ProductVM result;
+
+            if (vm.UnitOfMeasurement == Shop.Core.Domain.UnitOfMeasurement.Pieces)
+            {
+                if (vm.Stock % 1 != 0) // Not integer
+                {
+                    ViewBag.Product = vm;
+                    return View("WrongQuantity", vm);
+                }
+            }
 
             try
             {

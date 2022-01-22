@@ -1,0 +1,33 @@
+﻿@model Shop.WebApp.Models.ProductVM
+
+<div>
+    <h4>Błędna ilość</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Nazwa Produktu
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Name
+        </dd>
+        <dt class="col-sm-2">
+            Jednostka miary
+        </dt>
+        <dd class="col-sm-10">
+            szt.
+        </dd>
+        <dt class="col-sm-2">
+            Nie można dodać:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stock)
+        </dd>
+        <dt class="col-sm-2">
+            Zapas musi być liczbą całkowitą
+        </dt>
+    </dl>
+</div>
+<div>
+    <a href="javascript:void(0);" onclick="history.go(-1);">Powrót do dodawania produktu</a>
+    <a asp-action="Index">Powrót do listy produktów</a>
+</div>

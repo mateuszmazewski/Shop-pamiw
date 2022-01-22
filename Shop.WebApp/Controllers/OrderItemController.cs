@@ -134,6 +134,15 @@ namespace Zawodnicy.WebApp.Controllers
                         product = JsonConvert.DeserializeObject<ProductVM>(apiResponse);
                     }
 
+                    if (product.UnitOfMeasurement == Shop.Core.Domain.UnitOfMeasurement.Pieces)
+                    {
+                        if (vm.Quantity % 1 != 0) // Not integer
+                        {
+                            ViewBag.Product = product;
+                            return View("WrongQuantity", vm);
+                        }
+                    }
+
                     if (product.Stock < vm.Quantity)
                     {
                         ViewBag.Product = product;
