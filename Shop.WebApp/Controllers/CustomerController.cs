@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Shop.WebApp.Models;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Zawodnicy.WebApp.Controllers
 {
+    [Authorize()]
     public class CustomerController : Controller
     {
         public IConfiguration Configuration;
