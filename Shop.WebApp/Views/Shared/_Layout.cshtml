@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -34,6 +38,31 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+
+                        @* Wylogowanie, zalogowanie, zalogowany użytkownik *@
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                @*<a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Witaj @User.Identity.Name</a>*@
+                                Witaj @User.Identity.Name
+                            </li>
+                            <li class="nav-item">
+                                <form asp-area="" asp-controller="Account" asp-action="Logout" id="logoutForm" method="post" class="navbar-right">
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">Wyloguj</a>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Zarejestruj się</a>
+                                @*<a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="RegisterWithConfirm">Zarejestruj się</a>*@
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Zaloguj się</a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>
