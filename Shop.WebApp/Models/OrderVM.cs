@@ -11,6 +11,7 @@ namespace Shop.WebApp.Models
         public CustomerVM Customer { get; set; }
 
         [Display(Name = "Klient")]
+        [Required]
         public int CustomerId { get; set; }
 
         public PaymentVM Payment { get; set; }

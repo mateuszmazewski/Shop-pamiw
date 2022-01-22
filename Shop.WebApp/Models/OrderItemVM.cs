@@ -13,9 +13,11 @@ namespace Shop.WebApp.Models
         public Product Product { get; set; }
 
         [Display(Name = "Produkt")]
+        [Required]
         public int ProductId { get; set; }
 
         [Display(Name = "Ilość")]
+        [Required]
         public double Quantity { get; set; }
     }
 }
