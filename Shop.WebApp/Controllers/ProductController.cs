@@ -5,9 +5,11 @@ using Newtonsoft.Json;
 using Shop.WebApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace Zawodnicy.WebApp.Controllers
 {
@@ -33,7 +35,7 @@ namespace Zawodnicy.WebApp.Controllers
             return cn;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
             List<ProductVM> productsList = new List<ProductVM>();
@@ -47,7 +49,25 @@ namespace Zawodnicy.WebApp.Controllers
                 }
             }
 
-            return View(productsList);
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                productsList = productsList.Where(x => x.Name.ToLower().Contains(searchString.ToLower())).ToList();
+            }
+
+            return View(productsList.ToPagedList(pageNumber, pageSize));
         }
 
         public async Task<IActionResult> Edit(int id)
