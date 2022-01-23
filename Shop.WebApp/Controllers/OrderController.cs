@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using X.PagedList;
 using Shop.WebApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -187,7 +189,7 @@ namespace Zawodnicy.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string currentFilter, string searchString, int? page)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
             OrderVM order;
@@ -209,7 +211,32 @@ namespace Zawodnicy.WebApp.Controllers
                 }
             }
 
-            ViewBag.OrderItemsList = orderItemsList;
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
+            double total = 0;
+            foreach (OrderItemVM orderItem in orderItemsList)
+            {
+                total += Math.Round(orderItem.Product.Price * orderItem.Quantity, 2);
+            }
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                orderItemsList = orderItemsList.Where(x => x.Product.Name.Contains(searchString)).ToList();
+            }
+
+            ViewBag.Total = Math.Round(total, 2);
+            ViewBag.OrderItemsPagedList = orderItemsList.ToPagedList(pageNumber, pageSize);
             return View(order);
         }
     }

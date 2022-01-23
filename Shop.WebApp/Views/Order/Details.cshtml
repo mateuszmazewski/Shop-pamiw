@@ -1,12 +1,10 @@
 ﻿@model Shop.WebApp.Models.OrderVM
 @using Shop.Core.Domain
-@{List<OrderItemVM> OrderItemsList = ViewBag.OrderItemsList as List<OrderItemVM>;
-    double total = 0;
-    foreach (OrderItemVM orderItem in OrderItemsList)
-    {
-        total += Math.Round(orderItem.Product.Price * orderItem.Quantity, 2);
-    }
-    total = Math.Round(total, 2);
+@using X.PagedList
+@using X.PagedList.Mvc.Core;
+@{
+    IPagedList<OrderItemVM> OrderItemsPagedList = ViewBag.OrderItemsPagedList as IPagedList<OrderItemVM>;
+    double Total = ViewBag.Total;
 }
 
 @{
@@ -68,78 +66,74 @@
             Całkowita kwota zamówienia
         </dt>
         <dd class="col-sm-10">
-            @total zł
+            @Total zł
         </dd>
     </dl>
 </div>
 <a href="/OrderItem/Create/@Model.Id" class="btn btn-primary">Dodaj produkt do zamówienia</a>
 <h3></h3>
-<input type="search" id="searchInput" class="search" placeholder="Filtrowanie danych..." />
-<table class="table" id="productsTable">
-    <thead>
+
+@using (Html.BeginForm("Details", "Order", FormMethod.Get))
+{
+    <p>
+        Wyszukaj produkt po nazwie:
+        <br />
+        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Szukaj" />
+    </p>
+
+}
+
+<table class="table">
+    <tr>
+        <th>
+            Nazwa
+        </th>
+        <th>
+            Cena
+        </th>
+        <th>
+            Ilość
+        </th>
+        <th>
+            Suma
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var orderItem in OrderItemsPagedList)
+    {
         <tr>
-            <th>
-                Produkt
-            </th>
-            <th>
-                Cena
-            </th>
-            <th>
-                Ilość
-            </th>
-            <th>
-                Suma
-            </th>
-            <th></th>
+            <td>
+                @orderItem.Product.Name
+            </td>
+            <td>
+                @orderItem.Product.Price zł
+            </td>
+            <td>
+                @orderItem.Quantity @UnitOfMeasurementName(orderItem.Product.UnitOfMeasurement)
+            </td>
+            <td>
+                @{
+                    double sum = orderItem.Product.Price * orderItem.Quantity;
+                    sum = Math.Round(sum, 2);
+                }
+                @sum zł
+            </td>
+            <td>
+                @Html.ActionLink("Usuń", "Delete", "OrderItem", new { id = orderItem.Id })
+            </td>
         </tr>
-    </thead>
-    <tbody>
-        @foreach (var orderItem in OrderItemsList)
-        {
-            <tr>
-                <td>
-                    @orderItem.Product.Name
-                </td>
-                <td>
-                    @orderItem.Product.Price zł
-                </td>
-                <td>
-                    @orderItem.Quantity @UnitOfMeasurementName(orderItem.Product.UnitOfMeasurement)
-                </td>
-                <td>
-                    @{
-                        double sum = orderItem.Product.Price * orderItem.Quantity;
-                        sum = Math.Round(sum, 2);
-                    }
-                    @sum zł
-                </td>
-                <td>
-                    @Html.ActionLink("Usuń", "Delete", "OrderItem", new { id = orderItem.Id })
-                </td>
-            </tr>
-        }
-    </tbody>
+    }
+
 </table>
+<br />
+
+Strona @(OrderItemsPagedList.PageCount < OrderItemsPagedList.PageNumber ? 0 : OrderItemsPagedList.PageNumber) z @OrderItemsPagedList.PageCount
+@Html.PagedListPager(OrderItemsPagedList, page => Url.Action("Details",
+    new { page, currentFilter = ViewBag.CurrentFilter }))
+
 <div>
     @Html.ActionLink("Edytuj zamówienie", "Edit", new { id = Model.Id }) |
     <a asp-action="Index">Powrót do listy zamówień</a>
 </div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $('.search').on('keyup', function () {
-            var datasearch = $(this).val().toLowerCase();
-            $("#productsTable tr").not(':first').each(function () {
-                var stringdata = $(this).text().toLowerCase();
-                if (stringdata.indexOf(datasearch) === -1) {
-                    $(this).hide();
-                }
-                else {
-                    $(this).show();
-                }
-            });
-        });
-    })
-</script>
