@@ -35,7 +35,7 @@ namespace Zawodnicy.WebApp.Controllers
             return cn;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page)
         {
             string _restpath = GetHostUrl().Content + ControllerName();
             List<OrderVM> ordersList = new List<OrderVM>();
@@ -49,7 +49,25 @@ namespace Zawodnicy.WebApp.Controllers
                 }
             }
 
-            return View(ordersList);
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ordersList = ordersList.Where(x => x.Customer.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+            }
+
+            return View(ordersList.ToPagedList(pageNumber, pageSize));
         }
 
         public async Task<IActionResult> Edit(int id)

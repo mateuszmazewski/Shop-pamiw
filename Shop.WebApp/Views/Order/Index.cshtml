@@ -1,26 +1,39 @@
-﻿@model IEnumerable<Shop.WebApp.Models.OrderVM>
+﻿@model IPagedList<Shop.WebApp.Models.OrderVM>
+@using X.PagedList
+@using X.PagedList.Mvc.Core;
 
 <p>
     <a asp-action="Create">Dodaj zamówienie</a>
 </p>
-<input type="search" id="searchInput" class="search" placeholder="Filtrowanie danych..." />
+
+@using (Html.BeginForm("Index", "Order", FormMethod.Get))
+{
+    <p>
+        Wyszukaj zamówienie wg klienta:
+        <br />
+        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Szukaj" />
+    </p>
+
+}
+
 <table class="table" id="orderTable">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerId)
+                Klient
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PaymentId)
+                Płatność
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
+                Data utworzenia
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
+                Data modyfikacji
             </th>
             <th></th>
         </tr>
@@ -64,19 +77,6 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        $('.search').on('keyup', function () {
-            var datasearch = $(this).val().toLowerCase();
-            $("#orderTable tr").not(':first').each(function () {
-                var stringdata = $(this).text().toLowerCase();
-                if (stringdata.indexOf(datasearch) === -1) {
-                    $(this).hide();
-                }
-                else {
-                    $(this).show();
-                }
-            });
-        });
-    })
-</script>
+Strona @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) z @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, currentFilter = ViewBag.CurrentFilter }))
