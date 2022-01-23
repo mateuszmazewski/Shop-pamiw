@@ -9,19 +9,12 @@
     }
 }
 
-<h4>PaymentVM</h4>
+<h4>Dodawanie płatności</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <!--
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            -->
             @{
                 if (OrdersList != null)
                 {
@@ -44,33 +37,19 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Status" class="control-label"></label>
-                        <!--<input asp-for="Status" class="form-control" />-->
                         <br />
                         <select asp-for="@Model.Status" asp-items="Html.GetEnumSelectList<PaymentStatus>()"></select>
                         <span asp-validation-for="Status" class="text-danger"></span>
                     </div>
-                    <!--
-                    <div class="form-group">
-                        <label asp-for="CreatedAt" class="control-label"></label>
-                        <input asp-for="CreatedAt" class="form-control" />
-                        <span asp-validation-for="CreatedAt" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="UpdatedAt" class="control-label"></label>
-                        <input asp-for="UpdatedAt" class="form-control" />
-                        <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-                    </div>
-                    -->
                     <div class="form-group">
                         <label asp-for="PaymentMethod" class="control-label"></label>
-                        <!--<input asp-for="PaymentMethod" class="form-control" />-->
                         <br />
                         <select asp-for="@Model.PaymentMethod" asp-items="Html.GetEnumSelectList<PaymentMethod>()"></select>
                         <span asp-validation-for="PaymentMethod" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <input type="submit" value="Dodaj" class="btn btn-primary" />
                     </div>
                 }
                 else
@@ -83,7 +62,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Powrót do listy płatności</a>
 </div>
 
 @section Scripts {
