@@ -51,6 +51,9 @@ namespace Shop.WebApp
             // Mechanizm SignInManager
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
+
+            // Logowanie wyj¹tków
+            services.AddControllersWithViews(p => p.Filters.Add(new LogFilterAttribute()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
