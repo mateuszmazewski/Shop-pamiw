@@ -232,7 +232,7 @@ namespace Zawodnicy.WebApp.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                orderItemsList = orderItemsList.Where(x => x.Product.Name.Contains(searchString)).ToList();
+                orderItemsList = orderItemsList.Where(x => x.Product.Name.ToLower().Contains(searchString.ToLower())).ToList();
             }
 
             ViewBag.Total = Math.Round(total, 2);
