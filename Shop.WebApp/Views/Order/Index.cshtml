@@ -2,9 +2,8 @@
 @using X.PagedList
 @using X.PagedList.Mvc.Core;
 
-<p>
-    <a asp-action="Create">Dodaj zamówienie</a>
-</p>
+<a class="btn btn-primary" asp-action="Create">Dodaj zamówienie</a>
+<h3></h3>
 
 @using (Html.BeginForm("Index", "Order", FormMethod.Get))
 {
