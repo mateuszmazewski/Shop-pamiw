@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using X.PagedList;
 
-namespace Zawodnicy.WebApp.Controllers
+namespace Shop.WebApp.Controllers
 {
     [Authorize()]
     public class ProductController : Controller

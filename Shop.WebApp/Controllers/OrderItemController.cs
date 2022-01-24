@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zawodnicy.WebApp.Controllers
+namespace Shop.WebApp.Controllers
 {
     [Authorize()]
     public class OrderItemController : Controller
