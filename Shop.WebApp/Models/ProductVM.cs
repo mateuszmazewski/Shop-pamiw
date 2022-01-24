@@ -8,19 +8,19 @@ namespace Shop.WebApp.Models
         public int Id { get; set; }
 
         [Display(Name = "Nazwa")]
-        [Required]
+        [Required(ErrorMessage = "Nazwa jest wymagana")]
         public string Name { get; set; }
 
         [Display(Name = "Cena")]
-        [Required]
+        [Required(ErrorMessage = "Cena jest wwymagana")]
         public double Price { get; set; }
 
         [Display(Name = "Zapas")]
-        [Required]
+        [Required(ErrorMessage = "Zapas jest wymagany")]
         public double Stock { get; set; }
 
         [Display(Name = "J.m.")]
-        [Required]
+        [Required(ErrorMessage = "Jednostka miary jest wymagana")]
         public UnitOfMeasurement UnitOfMeasurement { get; set; }
 
         public override string ToString()

@@ -10,14 +10,14 @@ namespace Shop.WebApp.Models
         public int Id { get; set; }
 
         [Display(Name = "Zamówienie")]
-        [Required]
+        [Required(ErrorMessage = "Zamówienie jest wymagane")]
         public int OrderId { get; set; }
 
         [Display(Name = "Kwota")]
-        [Required]
+        [Required(ErrorMessage = "Kwota jest wymagana")]
         public double Amount { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Status jest wymagany")]
         public PaymentStatus Status { get; set; }
 
         [Display(Name = "Data utworzenia")]
@@ -27,7 +27,7 @@ namespace Shop.WebApp.Models
         public DateTime UpdatedAt { get; set; }
 
         [Display(Name = "Met. płatności")]
-        [Required]
+        [Required(ErrorMessage = "Metoda płatności jest wymagana")]
         public PaymentMethod PaymentMethod { get; set; }
     }
 }

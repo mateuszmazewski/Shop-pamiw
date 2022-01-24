@@ -13,11 +13,11 @@ namespace Shop.WebApp.Models
         public Product Product { get; set; }
 
         [Display(Name = "Produkt")]
-        [Required]
+        [Required(ErrorMessage = "Nazwa jest wymagana")]
         public int ProductId { get; set; }
 
         [Display(Name = "Ilość")]
-        [Required]
+        [Required(ErrorMessage = "Ilość jest wymagana")]
         public double Quantity { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Shop.WebApp.Models
         public CustomerVM Customer { get; set; }
 
         [Display(Name = "Klient")]
-        [Required]
+        [Required(ErrorMessage = "Klient jest wymagany")]
         public int CustomerId { get; set; }
 
         public PaymentVM Payment { get; set; }
