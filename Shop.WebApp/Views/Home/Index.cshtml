@@ -1,8 +1,72 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+<!-- Header -->
+<header id="head">
+    <div class="container" style="align-content: center>
+        <div class="row">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <h1 class="lead">Witaj, @User.Identity.Name</h1>
+                <p class="tagline">Jesteś zalogowany i możesz zarządzać sklepem.</p>
+            }
+            else
+            {
+                <h1 class="lead">Witaj</h1>
+                <p class="tagline">Aktualnie nie jesteś zalogowany. Zaloguj się, aby zarządzać sklepem.</p>
+                <p>
+                    <a class="btn btn-default btn-lg" role="button" asp-action="Register" asp-controller="Account">ZAREJESTRUJ SIĘ</a>
+                    <a class="btn btn-action btn-lg" role="button" asp-action="Login" asp-controller="Account">ZALOGUJ SIĘ</a>
+                </p>
+            }
+        </div>
+    </div>
+</header>
+<!-- /Header -->
+<!-- Intro -->
+<div class="container text-center">
+    <br> <br>
+    <h2 class="thin">Aplikacja do zarządzania sklepem</h2>
+    <p class="text-muted">
+        Jako zalogowany użytkownik możesz zarządzać klientami, produktami, zamówieniami i płatnościami.
+    </p>
 </div>
+<!-- /Intro-->
+<!-- Highlights - jumbotron -->
+<div class="jumbotron top-space">
+    <div class="container">
+
+        <h3 class="text-center thin">Czego możesz oczekiwać?</h3>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-6 highlight">
+                <div class="h-caption"><h4><i class="fa fa-cogs fa-5"></i>Automatyzacja</h4></div>
+                <div class="h-body text-center">
+                    <p>Przyspiesz swoją pracę i nie trać czasu na czynności, które mogą być wykonywane automatycznie</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 highlight">
+                <div class="h-caption"><h4><i class="fa fa-flash fa-5"></i>Szybkość działania</h4></div>
+                <div class="h-body text-center">
+                    <p>Zwiększ efektywność pracy</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 highlight">
+                <div class="h-caption"><h4><i class="fa fa-heart fa-5"></i>Nowoczesny wygląd</h4></div>
+                <div class="h-body text-center">
+                    <p>Przyjazny interfejs użytkownika</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 highlight">
+                <div class="h-caption"><h4><i class="fa fa-smile-o fa-5"></i>Zadowolenie klientów</h4></div>
+                <div class="h-body text-center">
+                    <p>Sprawniejsza obsługa zamówień przekłada się na większe zadowolenie klientów</p>
+                </div>
+            </div>
+        </div> <!-- /row  -->
+
+    </div>
+</div>
+<!-- /Highlights -->
