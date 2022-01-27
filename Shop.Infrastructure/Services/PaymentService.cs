@@ -4,6 +4,9 @@ using Shop.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Shop.Infrastructure.Services
@@ -33,6 +36,40 @@ namespace Shop.Infrastructure.Services
             {
                 o.PaymentId = payment.Id;
                 await _orderRepository.UpdateAsync(o);
+            }
+
+            string message = $"Pojawiła się nowa płatność:<br />" +
+                $"ID zamówienia: {payment.OrderId}<br />" +
+                $"Kwota: {payment.Amount} zł<br />" +
+                $"Status: {Payment.PaymentStatusDisplayName(payment.Status)}<br />" +
+                $"Metoda płatności: {Payment.PaymentMethodDisplayName(payment.PaymentMethod)}<br />" +
+                $"Data utworzenia: {payment.CreatedAt}<br />" +
+                $"Ta wiadomość została wygenerowana automatycznie.";
+            sendEmail("mateusz.mazewski.stud@pw.edu.pl", "Nowa płatność w systemie", message);
+        }
+
+        private void sendEmail(string toWhom, string subject, string mailBody)
+        {
+            string to = toWhom;
+            string from = "shopmanagementapp@gmail.com";
+            MailMessage mail = new MailMessage(from, to);
+
+            mail.Subject = subject;
+            mail.Body = mailBody;
+            mail.BodyEncoding = Encoding.UTF8;
+            mail.IsBodyHtml = true;
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587); // Gmail smtp    
+            NetworkCredential credentials = new NetworkCredential("shopmanagementapp@gmail.com", "SuperTajne.123");
+            client.EnableSsl = true;
+            client.Credentials = credentials;
+            try
+            {
+                client.Send(mail);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

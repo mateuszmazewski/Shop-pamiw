@@ -44,5 +44,29 @@ namespace Shop.Core.Domain
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
+
+        public static String PaymentMethodDisplayName(PaymentMethod method)
+        {
+            switch (method)
+            {
+                case PaymentMethod.BankTransfer: return "Przelew";
+                case PaymentMethod.Blik: return "Blik";
+                case PaymentMethod.Cash: return "Gotówka";
+                case PaymentMethod.CreditCard: return "Karta płatnicza";
+                default: return "";
+            }
+        }
+
+        public static String PaymentStatusDisplayName(PaymentStatus status)
+        {
+            switch (status)
+            {
+                case PaymentStatus.InProgress: return "W trakcie realizacji";
+                case PaymentStatus.Interrupted: return "Przerwana";
+                case PaymentStatus.NotPaid: return "Niezrealizowana";
+                case PaymentStatus.Paid: return "Zrealizowana";
+                default: return "";
+            }
+        }
     }
 }
